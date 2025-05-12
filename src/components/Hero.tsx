@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -15,9 +16,11 @@ const Hero = () => {
                 Descubre nuestra selección de productos y accesorios esenciales que harán tu vida más fácil y divertida.
               </p>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                <Button size="lg">Ver Productos</Button>
-                <Button variant="outline" size="lg">
-                  Ofertas Especiales
+                <Button size="lg" asChild>
+                  <Link to="/productos">Ver Productos</Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <Link to="/ofertas">Ofertas Especiales</Link>
                 </Button>
               </div>
             </div>
