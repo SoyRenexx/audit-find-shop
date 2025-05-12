@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 export interface Product {
   id: number;
@@ -24,6 +25,8 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, title, price, originalPrice, imageUrl, category }: ProductCardProps) => {
+  const { addToCart } = useCart();
+  
   // If product object is provided, use its properties, otherwise use the individual props
   const displayName = product?.name || title;
   const displayPrice = product?.price || price;
@@ -31,6 +34,20 @@ const ProductCard = ({ product, title, price, originalPrice, imageUrl, category 
   const displayDiscountPrice = product?.discountPrice;
   const isNewProduct = product?.isNew;
   const hasDiscount = displayDiscountPrice || originalPrice;
+
+  // Crear un objeto de producto unificado para añadir al carrito
+  const handleAddToCart = () => {
+    const productToAdd: Product = {
+      id: product?.id || Math.random(), // Usar ID existente o generar uno
+      name: displayName || "",
+      price: displayPrice || 0,
+      image: displayImage || "",
+      discountPrice: displayDiscountPrice || originalPrice,
+      isNew: isNewProduct
+    };
+    
+    addToCart(productToAdd);
+  };
 
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md">
@@ -70,7 +87,7 @@ const ProductCard = ({ product, title, price, originalPrice, imageUrl, category 
       </CardContent>
       
       <CardFooter className="pt-0">
-        <Button className="w-full" size="sm">
+        <Button className="w-full" size="sm" onClick={handleAddToCart}>
           <ShoppingCart className="h-4 w-4 mr-2" />
           Añadir al carrito
         </Button>

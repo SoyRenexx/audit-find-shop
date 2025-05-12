@@ -4,6 +4,8 @@ import { ShoppingCart, Search, User, Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
+import Cart from "./Cart";
+import SearchDialog from "./Search";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,12 +51,8 @@ const Navbar = () => {
         
         {/* Icons */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <ShoppingCart className="h-5 w-5" />
-          </Button>
+          <SearchDialog />
+          <Cart />
           
           {isLoggedIn ? (
             <div className="hidden md:flex items-center space-x-2">
