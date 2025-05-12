@@ -14,26 +14,38 @@ export interface Product {
 }
 
 interface ProductCardProps {
-  product: Product;
+  product?: Product;
+  // Add new prop types that match how the component is being used
+  title?: string;
+  price?: number;
+  originalPrice?: number;
+  imageUrl?: string;
+  category?: string;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
-  const { id, name, price, image, discountPrice, isNew } = product;
+const ProductCard = ({ product, title, price, originalPrice, imageUrl, category }: ProductCardProps) => {
+  // If product object is provided, use its properties, otherwise use the individual props
+  const displayName = product?.name || title;
+  const displayPrice = product?.price || price;
+  const displayImage = product?.image || imageUrl;
+  const displayDiscountPrice = product?.discountPrice;
+  const isNewProduct = product?.isNew;
+  const hasDiscount = displayDiscountPrice || originalPrice;
 
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md">
       <div className="overflow-hidden relative">
         <img
-          src={image}
-          alt={name}
+          src={displayImage}
+          alt={displayName}
           className="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
         />
-        {isNew && (
+        {isNewProduct && (
           <span className="absolute top-2 left-2 bg-primary py-1 px-2 text-xs text-white rounded-md">
             Nuevo
           </span>
         )}
-        {discountPrice && (
+        {hasDiscount && (
           <span className="absolute top-2 right-2 bg-red-500 py-1 px-2 text-xs text-white rounded-md">
             Oferta
           </span>
@@ -41,17 +53,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </div>
       
       <CardContent className="pt-4">
-        <h3 className="font-medium text-base mb-1 line-clamp-1">{name}</h3>
+        <h3 className="font-medium text-base mb-1 line-clamp-1">{displayName}</h3>
         <div className="flex items-center">
-          {discountPrice ? (
+          {hasDiscount ? (
             <>
-              <p className="font-semibold text-primary">${discountPrice.toFixed(2)}</p>
-              <p className="text-muted-foreground text-sm line-through ml-2">${price.toFixed(2)}</p>
+              <p className="font-semibold text-primary">${(displayDiscountPrice || originalPrice).toFixed(2)}</p>
+              <p className="text-muted-foreground text-sm line-through ml-2">${displayPrice.toFixed(2)}</p>
             </>
           ) : (
-            <p className="font-semibold text-primary">${price.toFixed(2)}</p>
+            <p className="font-semibold text-primary">${displayPrice.toFixed(2)}</p>
           )}
         </div>
+        {category && (
+          <p className="text-xs text-muted-foreground mt-1">{category}</p>
+        )}
       </CardContent>
       
       <CardFooter className="pt-0">
